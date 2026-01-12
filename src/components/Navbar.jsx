@@ -1,9 +1,9 @@
 import React from "react";
 import { assets } from "../assets/admin_assets/assets";
 
-const Navbar = () => {
+const Navbar = ({setToken}) => {
   return (
-    <nav className="relative flex h-16 items-center border-b bg-white px-6">
+    <nav className="relative flex h-16 items-center border-b bg-white px-6 sticky top-0">
       <img
         src={assets.logo}
         alt="Logo"
@@ -14,7 +14,7 @@ const Navbar = () => {
         ADMIN PANEL
       </span>
 
-      <button className="ml-auto rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-800">
+      <button onClick={() => setToken('')} className="ml-auto rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-800">
         Logout
       </button>
     </nav>
