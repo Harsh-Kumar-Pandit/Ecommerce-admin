@@ -44,7 +44,7 @@ const List = ({token}) => {
     fetchList();
   },[]);
   return (<>
-<div className="bg-white rounded-2xl border mt-[-50px] border-gray-200 shadow-sm">
+<div className="bg-white rounded-2xl border -mt-12.5 border-gray-200 shadow-sm">
   <div className="flex items-center justify-between px-6 py-4 border-b">
     <h2 className="text-lg font-semibold text-gray-900">
       All Products

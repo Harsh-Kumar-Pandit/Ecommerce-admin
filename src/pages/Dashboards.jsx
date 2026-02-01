@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import backendUrl from "../../config/api";
 
-const Dashboards = () => {
+const Dashboards = ({token}) => {
   const [stats, setStats] = useState({
     totalOrders: "--",
     totalRevenue: "--",
@@ -23,16 +23,19 @@ const Dashboards = () => {
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
 
+
   /* DASHBOARD STATS */
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const adminToken = localStorage.getItem("token");
+        if(!token){
+          return
+        }
 
         const res = await axios.get(
           backendUrl + "/api/admin/dashboard",
           {
-            headers: { token: adminToken },
+            headers: { token },
           }
         );
 
@@ -45,40 +48,35 @@ const Dashboards = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [token]);
 
   /*REVENUE CHART*/
   useEffect(() => {
-    const fetchRevenue = async () => {
-      try {
-        setLoadingChart(true);
-        const adminToken = localStorage.getItem("token");
+  if (!token) return;
 
-        const res = await axios.get(
-          backendUrl + `/api/admin/revenue?days=${range}`,
-          {
-            headers: { token: adminToken },
-          }
-        );
+  const fetchRevenue = async () => {
+    try {
+      setLoadingChart(true);
 
-        if (res.data.success) {
-          setChartData(res.data.data);
-        } else {
-          setChartData([]);
-        }
-      } catch (err) {
-        console.error("Revenue chart error:", err);
-        setChartData([]);
-      } finally {
-        setLoadingChart(false);
-      }
-    };
+      const res = await axios.get(
+        backendUrl + `/api/admin/revenue?days=${range}`,
+        { headers: { token } }
+      );
 
-    fetchRevenue();
-  }, [range]);
+      setChartData(res.data.success ? res.data.data : []);
+    } catch (err) {
+      console.error("Revenue chart error:", err);
+      setChartData([]);
+    } finally {
+      setLoadingChart(false);
+    }
+  };
+
+  fetchRevenue();
+}, [range, token]);
 
   return (
-    <div className="min-h-screen bg-gray-100 mt-[-30px] ">
+    <div className="min-h-screen bg-gray-100 -mt-7.5 ">
       <h1 className="text-2xl font-semibold mb-6">Admin Dashboard</h1>
 
       {/*  STATS CARDS  */}
@@ -105,7 +103,7 @@ const Dashboards = () => {
           </select>
         </div>
 
-        <div className="h-[320px]">
+        <div className="h-80">
           {loadingChart ? (
             <div className="h-full flex items-center justify-center text-gray-400">
               Loading revenue data...

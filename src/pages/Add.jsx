@@ -89,7 +89,7 @@ const Add = () => {
   };
 
   return (
-    <form onSubmit={onSubitHandler} className="space-y-8 mt-[-20px] max-w-3xl">
+    <form onSubmit={onSubitHandler} className="space-y-8 -mt-5 max-w-3xl">
       {/* Upload Images */}
       <div>
         <p className="text-sm font-semibold text-gray-700 mb-2">

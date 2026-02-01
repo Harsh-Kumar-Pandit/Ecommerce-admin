@@ -6,7 +6,8 @@ const Navbar = ({ setToken }) => {
     <nav
       className="
         sticky top-0 h-16 flex items-center px-6
-        bg-gradient-to-r from-white to-white
+       bg-white
+
         text-gray-900 border-b
       "
     >
@@ -19,7 +20,8 @@ const Navbar = ({ setToken }) => {
       </div>
 
       <button
-        onClick={() => setToken("")}
+        onClick={() =>{
+          localStorage.removeItem("token");  setToken("")}}
         className="rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
       >
         Logout

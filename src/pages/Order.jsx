@@ -53,7 +53,7 @@ const Order = ({token}) => {
     fetchallOrders()
   }, [token])
   return (
-    <div className="w-full p-2 mt-[-30px]">
+    <div className="w-full p-2 -mt-7.5">
       <h2 className="text-xl font-semibold mb-4">Order Page</h2>
 
       

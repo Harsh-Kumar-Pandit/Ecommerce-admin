@@ -38,7 +38,7 @@ document.documentElement.classList.toggle("dark");
       <main className="pt-16 md:ml-64 p-6 bg-gray-100 min-h-screen">
         <Routes>
           <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="/admin/dashboard" element={<Dashboards />} token={token}/>
+          <Route path="/admin/dashboard" element={<Dashboards token={token}/>}/>
           <Route path="/admin/add" element={<Add token={token}/>} />
           <Route path="/admin/list" element={<List token={token}/>} />
           <Route path="/admin/orders" element={<Order token={token}/>} />
