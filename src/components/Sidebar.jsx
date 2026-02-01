@@ -52,18 +52,6 @@ const Sidebar = () => {
           <NavLink to="/admin/orders" className={linkClass} onClick={closeSidebar}>
             Orders
           </NavLink>
-
-          <div className="mt-4 px-4 text-xs font-semibold uppercase tracking-wide text-gray-400">
-            Admin Management
-          </div>
-
-          <NavLink to="/admin/admins" className={linkClass} onClick={closeSidebar}>
-            Admin List
-          </NavLink>
-
-          <NavLink to="/admin/create-admin" className={linkClass} onClick={closeSidebar}>
-            Create Admin
-          </NavLink>
         </nav>
       </aside>
     </>

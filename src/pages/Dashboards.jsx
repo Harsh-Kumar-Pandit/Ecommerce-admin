@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   LineChart,
   Line,
@@ -8,143 +9,140 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import backendUrl from "../../config/api";
 
 const Dashboards = () => {
-  const [range, setRange] = useState("7");
+  const [stats, setStats] = useState({
+    totalOrders: "--",
+    totalRevenue: "--",
+    totalUsers: "--",
+    totalProducts: "--",
+  });
 
-  // Dummy graph data
-  const data7Days = [
-    { day: "Mon", revenue: 1200 },
-    { day: "Tue", revenue: 2100 },
-    { day: "Wed", revenue: 1800 },
-    { day: "Thu", revenue: 2600 },
-    { day: "Fri", revenue: 3200 },
-    { day: "Sat", revenue: 2800 },
-    { day: "Sun", revenue: 3500 },
-  ];
+  const [range, setRange] = useState(7);
+  const [chartData, setChartData] = useState([]);
+  const [loadingChart, setLoadingChart] = useState(true);
 
-  const data30Days = Array.from({ length: 30 }, (_, i) => ({
-    day: `Day ${i + 1}`,
-    revenue: Math.floor(Math.random() * 4000) + 1000,
-  }));
+  /* DASHBOARD STATS */
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const adminToken = localStorage.getItem("token");
 
-  const data90Days = Array.from({ length: 90 }, (_, i) => ({
-    day: `Day ${i + 1}`,
-    revenue: Math.floor(Math.random() * 5000) + 1500,
-  }));
+        const res = await axios.get(
+          backendUrl + "/api/admin/dashboard",
+          {
+            headers: { token: adminToken },
+          }
+        );
 
-  const chartData =
-    range === "7" ? data7Days : range === "30" ? data30Days : data90Days;
+        if (res.data.success) {
+          setStats(res.data.stats);
+        }
+      } catch (err) {
+        console.error("Dashboard stats error:", err);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  /*REVENUE CHART*/
+  useEffect(() => {
+    const fetchRevenue = async () => {
+      try {
+        setLoadingChart(true);
+        const adminToken = localStorage.getItem("token");
+
+        const res = await axios.get(
+          backendUrl + `/api/admin/revenue?days=${range}`,
+          {
+            headers: { token: adminToken },
+          }
+        );
+
+        if (res.data.success) {
+          setChartData(res.data.data);
+        } else {
+          setChartData([]);
+        }
+      } catch (err) {
+        console.error("Revenue chart error:", err);
+        setChartData([]);
+      } finally {
+        setLoadingChart(false);
+      }
+    };
+
+    fetchRevenue();
+  }, [range]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-
-      {/* PAGE TITLE */}
+    <div className="min-h-screen bg-gray-100 mt-[-30px] ">
       <h1 className="text-2xl font-semibold mb-6">Admin Dashboard</h1>
 
-      {/* STATS CARDS */}
+      {/*  STATS CARDS  */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div className="bg-white p-5 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Total Orders</p>
-          <h2 className="text-2xl font-bold mt-2">128</h2>
-        </div>
-
-        <div className="bg-white p-5 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Total Revenue</p>
-          <h2 className="text-2xl font-bold mt-2">₹1,24,500</h2>
-        </div>
-
-        <div className="bg-white p-5 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Total Users</p>
-          <h2 className="text-2xl font-bold mt-2">342</h2>
-        </div>
-
-        <div className="bg-white p-5 rounded-lg shadow">
-          <p className="text-sm text-gray-500">Products</p>
-          <h2 className="text-2xl font-bold mt-2">56</h2>
-        </div>
+        <StatCard title="Total Orders" value={stats.totalOrders} />
+        <StatCard title="Total Revenue" value={stats.totalRevenue} />
+        <StatCard title="Total Users" value={stats.totalUsers} />
+        <StatCard title="Total Products" value={stats.totalProducts} />
       </div>
 
-      {/* GRAPH SECTION */}
-      <div className="bg-white p-6 rounded-lg shadow mb-10">
-        <div className="flex items-center justify-between mb-4">
+      {/*  REVENUE OVERVIEW  */}
+      <div className="bg-white p-6 rounded-lg shadow">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Revenue Overview</h2>
 
           <select
             value={range}
-            onChange={(e) => setRange(e.target.value)}
+            onChange={(e) => setRange(Number(e.target.value))}
             className="border rounded px-3 py-1 text-sm"
           >
-            <option value="7">Last 7 Days</option>
-            <option value="30">Last 30 Days</option>
-            <option value="90">Last 90 Days</option>
+            <option value={7}>Last 7 Days</option>
+            <option value={30}>Last 30 Days</option>
+            <option value={90}>Last 90 Days</option>
           </select>
         </div>
 
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#16a34a"
-                strokeWidth={3}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <div className="h-[320px]">
+          {loadingChart ? (
+            <div className="h-full flex items-center justify-center text-gray-400">
+              Loading revenue data...
+            </div>
+          ) : chartData.length === 0 ? (
+            <div className="h-full flex items-center justify-center text-gray-400">
+              No revenue data for selected period
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#2563eb"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* RECENT ORDERS */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">Recent Orders</h2>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-gray-500 border-b">
-                <th className="py-2">Order ID</th>
-                <th>User</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr className="border-b">
-                <td className="py-2">#ORD123</td>
-                <td>Rahul</td>
-                <td>₹2,499</td>
-                <td className="text-green-600">Delivered</td>
-                <td>25 Jul 2025</td>
-              </tr>
-
-              <tr className="border-b">
-                <td className="py-2">#ORD124</td>
-                <td>Ankit</td>
-                <td>₹1,299</td>
-                <td className="text-yellow-600">Shipped</td>
-                <td>24 Jul 2025</td>
-              </tr>
-
-              <tr>
-                <td className="py-2">#ORD125</td>
-                <td>Neha</td>
-                <td>₹3,999</td>
-                <td className="text-red-600">Pending</td>
-                <td>23 Jul 2025</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+/*  STAT CARD COMPONENT  */
+const StatCard = ({ title, value }) => {
+  return (
+    <div className="bg-white p-5 rounded-lg shadow">
+      <p className="text-sm text-gray-500">{title}</p>
+      <h2 className="text-2xl font-bold mt-2">{value}</h2>
     </div>
   );
 };

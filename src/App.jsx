@@ -6,8 +6,6 @@ import Dashboards from "./pages/Dashboards";
 import Add from "./pages/Add";
 import List from "./pages/List";
 import Order from "./pages/Order";
-import Admin from "./pages/Admin";
-import CreateAdmin from "./pages/CreateAdmin";
 import { useState } from "react";
 import Login from "./components/Login";
 import { ToastContainer } from 'react-toastify';
@@ -21,6 +19,16 @@ const App = () => {
     localStorage.setItem('token', token)
   },[token])
 
+  useEffect(() => {
+  if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
+}, []);
+
+document.documentElement.classList.toggle("dark");
+
+
+
   return (
     <>
     <ToastContainer/>
@@ -29,13 +37,11 @@ const App = () => {
 
       <main className="pt-16 md:ml-64 p-6 bg-gray-100 min-h-screen">
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/admin/dashboard" element={<Dashboards />} token={token}/>
           <Route path="/admin/add" element={<Add token={token}/>} />
           <Route path="/admin/list" element={<List token={token}/>} />
           <Route path="/admin/orders" element={<Order token={token}/>} />
-          <Route path="/admin/admins" element={<Admin token={token}/>} />
-          <Route path="/admin/create-admin" element={<CreateAdmin token={token}/>} />
         </Routes>
       </main></>}
       

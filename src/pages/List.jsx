@@ -12,7 +12,7 @@ const List = ({token}) => {
     try {
       const response = await axios.get(backendUrl + "/api/product/list");
       if (response.data.success) {
-        setList(response.data.products);
+        setList(response.data.products.reverse());
       } else {
         toast.error(response.data.message);
       }
@@ -44,7 +44,7 @@ const List = ({token}) => {
     fetchList();
   },[]);
   return (<>
-<div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+<div className="bg-white rounded-2xl border mt-[-50px] border-gray-200 shadow-sm">
   <div className="flex items-center justify-between px-6 py-4 border-b">
     <h2 className="text-lg font-semibold text-gray-900">
       All Products
