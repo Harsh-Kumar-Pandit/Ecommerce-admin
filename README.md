@@ -20,6 +20,48 @@
 The **E-commerce Admin Dashboard** is a comprehensive web application designed to provide administrative insights and complete management capabilities for e-commerce platforms. Built with modern technologies, this dashboard offers a seamless experience for managing products, orders, customers, and analyzing business metrics.
 
 ---
+## 📸 Screenshots
+
+<div align="center">
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎨 Dashboard Overview
+<img src="Screenshots/Dashboard.png" alt="Dashboard Overview" width="100%">
+<p><i>Main dashboard with analytics, charts, and key performance metrics</i></p>
+
+</td>
+<td width="50%">
+
+### ➕ Add Product Interface
+<img src="Screenshots/Add.png" alt="Add Product" width="100%">
+<p><i>Product creation and management interface</i></p>
+
+</td>
+</tr>
+
+<tr>
+<td width="50%">
+
+### 📋 Product List Management
+<img src="Screenshots/List.png" alt="Product List" width="100%">
+<p><i>Comprehensive product listing with edit and delete options</i></p>
+
+</td>
+<td width="50%">
+
+### 📦 Order Management
+<img src="Screenshots/Order.png" alt="Order Management" width="100%">
+<p><i>Order tracking, status updates, and fulfillment dashboard</i></p>
+
+</td>
+</tr>
+</table>
+
+</div>
+---
 
 ## ✨ Key Features
 
@@ -160,47 +202,7 @@ Ecommerce-admin/
 
 ---
 
-## 📸 Screenshots
 
-<div align="center">
-
-<table>
-<tr>
-<td width="50%">
-
-### 🎨 Dashboard Overview
-<img src="Screenshots/Dashboard.png" alt="Dashboard Overview" width="100%">
-<p><i>Main dashboard with analytics, charts, and key performance metrics</i></p>
-
-</td>
-<td width="50%">
-
-### ➕ Add Product Interface
-<img src="Screenshots/Add.png" alt="Add Product" width="100%">
-<p><i>Product creation and management interface</i></p>
-
-</td>
-</tr>
-
-<tr>
-<td width="50%">
-
-### 📋 Product List Management
-<img src="Screenshots/List.png" alt="Product List" width="100%">
-<p><i>Comprehensive product listing with edit and delete options</i></p>
-
-</td>
-<td width="50%">
-
-### 📦 Order Management
-<img src="Screenshots/Order.png" alt="Order Management" width="100%">
-<p><i>Order tracking, status updates, and fulfillment dashboard</i></p>
-
-</td>
-</tr>
-</table>
-
-</div>
 
 ---
 
